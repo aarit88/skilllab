@@ -1,0 +1,454 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>E-Commerce Website</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background: #5151ac;
+            color: #333;
+            line-height: 1.6;
+        }
+
+        header {
+            background: #265c82;
+            color: white;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem 2rem;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+
+        .logo {
+            font-size: 1.5rem;
+            font-weight: bold;
+        }
+
+        nav ul {
+            display: flex;
+            list-style: none;
+        }
+
+        nav ul li {
+            margin-left: 1.5rem;
+        }
+
+        nav ul li a {
+            text-decoration: none;
+            color: white;
+            transition: color 0.3s;
+        }
+
+        nav ul li a:hover {
+            color: #f39c12;
+        }
+
+        #loginBtn {
+            background: #f39c12;
+            border: none;
+            padding: 0.5rem 1rem;
+            color: white;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+
+        #loginBtn:hover {
+            background: #e67e22;
+        }
+
+        .hero {
+            background: url('https://source.unsplash.com/1600x600/?shopping,store') center/cover no-repeat;
+            color: white;
+            padding: 5rem 2rem;
+            text-align: center;
+        }
+
+        .hero h1 {
+            font-size: 3rem;
+        }
+
+        .hero p {
+            font-size: 1.25rem;
+            margin: 1rem 0;
+        }
+
+        .hero button {
+            background: #e67e22;
+            border: none;
+            padding: 1rem 2rem;
+            font-size: 1rem;
+            color: white;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+
+        .hero button:hover {
+            background: #d35400;
+        }
+
+        .products {
+            padding: 3rem 2rem;
+            background: #556ea4;
+            text-align: center;
+            position: relative;
+        }
+
+        .products h2 {
+            margin-bottom: 2rem;
+            font-size: 2rem;
+        }
+
+        .product-list-container {
+            position: relative;
+            overflow: hidden;
+            width: 100%;
+            margin: 0 auto;
+        }
+
+        .product-list {
+            display: flex;
+            transition: transform 0.5s ease;
+            width: 100%;
+        }
+
+        .product-card {
+            background: #3a8bb6;
+            border: 1px solid #ddd;
+            padding: 1rem;
+            border-radius: 10px;
+            width: calc(25% - 1.5rem);
+            min-width: 200px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+            transition: transform 0.3s;
+            margin: 0 0.75rem;
+            flex-shrink: 0;
+        }
+
+        .product-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .product-card img {
+            max-width: 100%;
+            height: 180px;
+            object-fit: cover;
+            border-radius: 5px;
+        }
+
+        .product-card button {
+            margin-top: 1rem;
+            background: #0a3d62;
+            color: white;
+            border: none;
+            padding: 0.5rem 1rem;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .product-card button:hover {
+            background: #1e3799;
+        }
+
+        .nav-btn {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            background: rgba(0,0,0,0.5);
+            color: white;
+            border: none;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            font-size: 1.2rem;
+            cursor: pointer;
+            z-index: 10;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .prev-btn {
+            left: 10px;
+        }
+
+        .next-btn {
+            right: 10px;
+        }
+
+        .about, .contact {
+            padding: 3rem 2rem;
+            background: #5864d6;
+            text-align: center;
+        }
+
+        .contact form {
+            max-width: 500px;
+            margin: auto;
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        .contact input, .contact textarea {
+            padding: 0.75rem;
+            border: 1px solid #9d7a7a;
+            border-radius: 5px;
+        }
+
+        .contact button {
+            background: orange;
+            color: white;
+            border: none;
+            padding: 0.75rem;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1001;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgba(0,0,0,0.5);
+        }
+
+        .modal-content {
+            background-color: #956767;
+            margin: 10% auto;
+            padding: 2rem;
+            border: 1px solid #888;
+            width: 90%;
+            max-width: 400px;
+            border-radius: 10px;
+            position: relative;
+        }
+
+        .close {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: #333;
+        }
+
+        /* Hide navigation buttons when not needed */
+        .nav-btn.hidden {
+            display: none;
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Header Section -->
+    <header>
+        <div class="logo">ShopEase</div>
+        <nav>
+            <ul>
+                <li><a href="#home">Home</a></li>
+                <li><a href="#products">Products</a></li>
+                <li><a href="#about">About</a></li>
+                <li><a href="#contact">Contact</a></li>
+            </ul>
+        </nav>
+        <button id="loginBtn">Login</button>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="hero" id="home">
+        <h1>Welcome to ShopEase</h1>
+        <p>Your one-stop shop for everything!</p>
+        <button>Shop Now</button>
+    </section>
+
+    <!-- Products Section -->
+    <section class="products" id="products">
+        <h2>Featured Products</h2>
+        <div class="product-list-container">
+            <button class="nav-btn prev-btn" id="prevBtn">&#10094;</button>
+            <div class="product-list" id="productList">
+                <div class="product-card">
+                    <img src="https://encrypted-tbn2.gstatic.com/shopping?q=tbn:ANd9GcSr88mS4yVf-PFen7Aa_zGsnaw3KJ2i6hrLwNsCzrImgCzdB98GtlJzG5O1xzIWXH4rxGT0P9N2MLG_plFQobqRdhl2YK_Lnz5PNBu38mJehYtZ3ogeXjv0" alt="Saree">
+                    <h3>Saree</h3>
+                    <p>$29.99</p>
+                    <button>Add to Cart</button>
+                </div>
+                <div class="product-card">
+                    <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSPLq8LfBFBU94zqsR0zNkfBkfpaQ0t3iggYA&s" alt="Lengha">
+                    <h3>Lengha</h3>
+                    <p>$85.99</p>
+                    <button>Add to Cart</button>
+                </div>
+                <div class="product-card">
+                    <img src="https://encrypted-tbn3.gstatic.com/shopping?q=tbn:ANd9GcSZOKxooBPBr5-2Sg_TmZb4uvrmqAkysqYb8tTX7D9uLEmdz1XwroyhEhEL0syYZiaYK4XQ8-ps8vdsUoC06FhzTMm2SV5DuPSeBBk6JRlR__5ENGDp4A64-Vs" alt="Kurti">
+                    <h3>Kurti</h3>
+                    <p>$39.99</p>
+                    <button>Add to Cart</button>
+                </div>
+                <div class="product-card">
+                    <img src="https://www.theambitioncollective.in/cdn/shop/products/ClassicWorkBlazer_TrouserSet-Beige_7_jpg_jpg_jpg_jpg.jpg?v=1670827267" alt="Blazer Woman">
+                    <h3>Blazer Woman</h3>
+                    <p>$15.99</p>
+                    <button>Add to Cart</button>
+                </div>
+                <div class="product-card">
+                    <img src="https://encrypted-tbn1.gstatic.com/shopping?q=tbn:ANd9GcR1KNnCV9EJwHhk3Zs_VQV0xXGRfefVpW-oXVudJ9PyRvDrT87RZCDBUf5836iys-zjbaiKYlERjUvzwA18gyc4Pr_8fnezQSCfXOlDCUwpuDMV-HtuVco1erg" alt="Sherwani">
+                    <h3>Indo-western Sherwani</h3>
+                    <p>$23.99</p>
+                    <button>Add to Cart</button>
+                </div>
+                <div class="product-card">
+                    <img src="https://img2.ogaanindia.com/pub/media/catalog/product/cache/3f6619daccdb194398d06464ab49fa6e/v/c/vcrc211.jpg" alt="Blazer">
+                    <h3>Blazer</h3>
+                    <p>$33.99</p>
+                    <button>Add to Cart</button>
+                </div>
+                <div class="product-card">
+                    <img src="https://i.etsystatic.com/23593074/r/il/ae8a97/6310683819/il_fullxfull.6310683819_6hp3.jpg" alt="Sherwani">
+                    <h3>Groom Sherwani</h3>
+                    <p>$53.99</p>
+                    <button>Add to Cart</button>
+                </div>
+                <div class="product-card">
+                    <img src="https://images.wholesalesalwar.com/2022y/October/35899/Black-Cotton-Art-Silk-Traditional-Wear-Embroidery-Work-Kurta-Pajama-2417.jpg" alt="Kurta Pajama">
+                    <h3>Kurta Pajama</h3>
+                    <p>$8.99</p>
+                    <button>Add to Cart</button>
+                </div>
+            </div>
+            <button class="nav-btn next-btn" id="nextBtn">&#10095;</button>
+        </div>
+    </section>
+
+    <!-- About Section -->
+    <section class="about" id="about">
+        <h2>About Us</h2>
+        <p>We are dedicated to providing quality products at unbeatable prices.</p>
+    </section>
+
+    <!-- Contact Section -->
+    <section class="contact" id="contact">
+        <h2>Contact Us</h2>
+        <form id="contactForm">
+            <input type="text" placeholder="Your Name" required>
+            <input type="email" placeholder="Your Email" required>
+            <textarea placeholder="Your Message" required></textarea>
+            <button type="submit">Send Message</button>
+        </form>
+    </section>
+
+    <!-- Login Modal -->
+    <div id="loginModal" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <h2>Login</h2>
+            <form id="loginForm">
+                <input type="text" placeholder="Username" required>
+                <input type="password" placeholder="Password" required>
+                <button type="submit">Login</button>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        const modal = document.getElementById('loginModal');
+        const loginBtn = document.getElementById('loginBtn');
+        const closeBtn = document.querySelector('.close');
+        const contactForm = document.getElementById('contactForm');
+        const loginForm = document.getElementById('loginForm');
+        const productList = document.getElementById('productList');
+        const prevBtn = document.getElementById('prevBtn');
+        const nextBtn = document.getElementById('nextBtn');
+
+        const products = document.querySelectorAll('.product-card');
+        const productsPerPage = 4;
+        const totalPages = Math.ceil(products.length / productsPerPage);
+        let currentIndex = 0;
+
+        function updateProductDisplay() {
+            // Calculate the width of each product card including margins
+            const productCard = products[0];
+            const cardWidth = productCard.offsetWidth + 
+                            parseInt(window.getComputedStyle(productCard).marginLeft) + 
+                            parseInt(window.getComputedStyle(productCard).marginRight);
+            
+            // Calculate the offset based on current index
+            const offset = -currentIndex * (cardWidth * productsPerPage);
+            productList.style.transform = `translateX(${offset}px)`;
+            
+            // Update button visibility
+            prevBtn.classList.toggle('hidden', currentIndex === 0);
+            nextBtn.classList.toggle('hidden', currentIndex >= totalPages - 1);
+        }
+
+        prevBtn.addEventListener('click', () => {
+            if (currentIndex > 0) {
+                currentIndex--;
+                updateProductDisplay();
+            }
+        });
+
+        nextBtn.addEventListener('click', () => {
+            if (currentIndex < totalPages - 1) {
+                currentIndex++;
+                updateProductDisplay();
+            }
+        });
+
+        // Initialize display
+        updateProductDisplay();
+
+        // Handle window resize
+        window.addEventListener('resize', updateProductDisplay);
+
+        loginBtn.onclick = () => {
+            modal.style.display = 'block';
+        };
+
+        closeBtn.onclick = () => {
+            modal.style.display = 'none';
+        };
+
+        window.onclick = (event) => {
+            if (event.target === modal) {
+                modal.style.display = 'none';
+            }
+        };
+
+        // Contact form submission
+        contactForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+            alert('Thank you for your message! We will get back to you soon.');
+            contactForm.reset();
+        });
+
+        // Login form submission
+        loginForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+            alert('Login successful! Welcome back.');
+            modal.style.display = 'none';
+            loginForm.reset();
+        });
+    </script>
+</body>
+
+</html>
